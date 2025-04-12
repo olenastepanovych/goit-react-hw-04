@@ -1,34 +1,24 @@
 import Modal from 'react-modal';
 import styles from './ImageModal.module.css';
 
-Modal.setAppElement('#root'); // обовʼязково для accessibility
+Modal.setAppElement('#root');
 
 const ImageModal = ({ image, onClose }) => {
-const { urls, alt_description, user, likes, description } = image;
-
-return (
+  return (
     <Modal
-    isOpen={true}
-    onRequestClose={onClose}
-    contentLabel="Image modal"
-    className={styles.modal}
-    overlayClassName={styles.overlay}
+      isOpen={!!image}
+      onRequestClose={onClose}
+      className={styles.modal}
+      overlayClassName={styles.overlay}
     >
-    <div className={styles.content}>
-        <img
-        src={urls.regular}
-        alt={alt_description}
-        className={styles.image}
-        />
-        <div className={styles.details}>
-        <p><strong>Author:</strong> {user.name}</p>
-        {description && <p><strong>Description:</strong> {description}</p>}
-        <p><strong>Likes:</strong> {likes}</p>
-        </div>
-        <button onClick={onClose} className={styles.closeBtn}>✖</button>
-    </div>
+      <img src={image.urls.regular} alt={image.alt_description} />
+      <div className={styles.info}>
+        <p><strong>Author:</strong> {image.user.name}</p>
+        <p><strong>Likes:</strong> {image.likes}</p>
+        {image.description && <p><strong>Description:</strong> {image.description}</p>}
+      </div>
     </Modal>
-);
+  );
 };
 
 export default ImageModal;

@@ -1,46 +1,47 @@
-import { useState } from 'react';
-import styles from './SearchBar.module.css';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { IoIosSearch } from "react-icons/io";
+import styles from './SearchBar.module.css';
 
 const SearchBar = ({ onSubmit }) => {
-const [search, setSearch] = useState('');
+  const validationSchema = Yup.object({
+    query: Yup.string().required('Обовʼязкове поле'),
+  });
 
-const handleChange = (e) => {
-    setSearch(e.target.value);
-};
-
-const handleSubmit = (e) => {
-    e.preventDefault();
-    const trimmed = search.trim();
-
+  const handleFormSubmit = (values, { resetForm }) => {
+    const trimmed = values.query.trim();
     if (!trimmed) {
-    toast.error('Please enter a search term');
-    return;
+      toast.error('Please enter a search term!');
+      return;
     }
 
     onSubmit(trimmed);
-};
+    resetForm();
+  };
 
-return (
+  return (
     <header className={styles.header}>
-    <form onSubmit={handleSubmit} className={styles.form}>
-        <input
-        type="text"
-        value={search}
-        onChange={handleChange}
-        autoComplete="off"
-        autoFocus
-        placeholder="Search images and photos"
-        className={styles.input}
-        />
-
-<button type="submit" className={styles.button}>
-        <IoIosSearch size={16} />
-        </button>
-    </form>
+      <Formik
+        initialValues={{ query: '' }}
+        validationSchema={validationSchema}
+        onSubmit={handleFormSubmit}
+      >
+        <Form className={styles.form}>
+          <Field
+            type="text"
+            name="query"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            className={styles.input}
+          />
+          <button type="submit" className={styles.button}>
+            Search
+          </button>
+        </Form>
+      </Formik>
     </header>
-);
+  );
 };
 
 export default SearchBar;
