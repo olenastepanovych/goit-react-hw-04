@@ -5,7 +5,7 @@ import styles from './SearchBar.module.css';
 
 const SearchBar = ({ onSubmit }) => {
   const validationSchema = Yup.object({
-    query: Yup.string().required('Обовʼязкове поле'),
+    query: Yup.string().required(''),
   });
 
   const handleFormSubmit = (values, { resetForm }) => {
